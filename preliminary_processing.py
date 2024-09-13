@@ -34,6 +34,16 @@ df = df.groupby(
     as_index=False,
 ).mean()
 
+# Calculate LOS (Length of Stay) in days and insert it after the column `Outcome`
+df.insert(
+    5,
+    "LOS",
+    (pd.to_datetime(df["DischargeTime"]) - pd.to_datetime(df["RecordTime"])).dt.days,
+)
+
+# Notice: Set negative LOS values to 0
+df["LOS"] = df["LOS"].apply(lambda x: 0 if x < 0 else x)
+
 # Export formatted table
 os.makedirs(dst_dir, exist_ok=True)
 df.to_csv(os.path.join(dst_dir, dst_file), index=False)

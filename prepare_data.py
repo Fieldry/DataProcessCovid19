@@ -23,7 +23,7 @@ df = df.rename(
 )
 
 # Fill PatientID column
-df["PatientID"].ffill(inplace=True)
+df["PatientID"] = df["PatientID"].ffill()
 
 # Change the order of columns
 basic_records = ["PatientID", "RecordTime", "AdmissionTime", "DischargeTime", "Outcome"]

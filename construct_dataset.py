@@ -1,5 +1,4 @@
 # Import packages and define tool functions
-
 import os
 
 import pandas as pd
@@ -135,13 +134,13 @@ def normalize_dataframe(train_df, val_df, test_df, normalize_features):
         test_df.loc[:, normalize_features] - train_mean
     ) / (train_std + 1e-12)
 
-    train_df.loc[:, normalize_features] = train_df.loc[:, normalize_features].applymap(
+    train_df.loc[:, normalize_features] = train_df.loc[:, normalize_features].map(
         filter_outlier
     )
-    val_df.loc[:, normalize_features] = val_df.loc[:, normalize_features].applymap(
+    val_df.loc[:, normalize_features] = val_df.loc[:, normalize_features].map(
         filter_outlier
     )
-    test_df.loc[:, normalize_features] = test_df.loc[:, normalize_features].applymap(
+    test_df.loc[:, normalize_features] = test_df.loc[:, normalize_features].map(
         filter_outlier
     )
 
@@ -152,9 +151,11 @@ def normalize_dataframe(train_df, val_df, test_df, normalize_features):
 df = pd.read_csv(src_file)
 
 basic_records = ["PatientID", "RecordTime", "AdmissionTime", "DischargeTime"]
-demographic_features = ["Gender", "Age"]
 target_features = ["Outcome", "LOS"]
-labtest_features = list(set(df.columns) - set(basic_records + demographic_features))
+demographic_features = ["Gender", "Age"]
+labtest_features = list(
+    set(df.columns) - set(basic_records + target_features + demographic_features)
+)
 seed = 42
 num_folds = 10
 
@@ -188,7 +189,7 @@ for fold, (train_val_index, test_index) in enumerate(
 
     assert len(train_df) + len(val_df) + len(test_df) == len(df)
 
-    fold_dir = os.path.join(dst_dir, f"fold_{fold}")
+    fold_dir = os.path.join(dst_dir, f"fold_{fold + 1}")
     os.makedirs(fold_dir, exist_ok=True)
 
     # Calculate the mean and std of the train set (include age, lab test features, and LOS) on the data in 5% to 95% quantile range
@@ -207,13 +208,13 @@ for fold, (train_val_index, test_index) in enumerate(
     # Forward Imputation after grouped by PatientID
     # Notice: if a patient has never done certain lab test, the imputed value will be the median value calculated from train set
     train_x, train_y, train_pid = forward_fill_pipeline(
-        train_df, default_fill, demographic_features, labtest_features
+        train_df, default_fill, demographic_features, labtest_features, target_features
     )
     val_x, val_y, val_pid = forward_fill_pipeline(
-        val_df, default_fill, demographic_features, labtest_features
+        val_df, default_fill, demographic_features, labtest_features, target_features
     )
     test_x, test_y, test_pid = forward_fill_pipeline(
-        test_df, default_fill, demographic_features, labtest_features
+        test_df, default_fill, demographic_features, labtest_features, target_features
     )
 
     # Save the imputed dataset to pickle file
