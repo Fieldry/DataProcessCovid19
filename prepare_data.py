@@ -2,12 +2,12 @@ import os
 
 import pandas as pd
 
-src_file = "time_series_375_prerpocess_en.xlsx"
-dst_dir = "data"
+src_file = "datasets/tjh/raw/time_series_375_prerpocess_en.xlsx"
+dst_dir = "datasets/tjh/raw"
 dst_file = "standard_data.csv"
 
 # Read in original data
-df = pd.read_excel(src_file)
+df = pd.read_excel(src_file, engine="openpyxl")
 
 # Rename columns
 df = df.rename(
