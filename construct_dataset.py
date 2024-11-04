@@ -23,7 +23,6 @@ def fill_missing_value(data, to_fill_value=0):
     if data_len == data_exist_len:
         return data
     elif data_exist_len == 0:
-        # data = [to_fill_value for _ in range(data_len)]
         for i in range(data_len):
             data[i] = to_fill_value
         return data
@@ -134,14 +133,14 @@ def normalize_dataframe(train_df, val_df, test_df, normalize_features):
         test_df.loc[:, normalize_features] - train_mean
     ) / (train_std + 1e-12)
 
-    train_df.loc[:, normalize_features] = train_df.loc[:, normalize_features].map(
-        filter_outlier
+    train_df.loc[:, normalize_features] = train_df.loc[:, normalize_features].mask(
+        train_df.loc[:, normalize_features].abs() > 3 * train_std
     )
-    val_df.loc[:, normalize_features] = val_df.loc[:, normalize_features].map(
-        filter_outlier
+    val_df.loc[:, normalize_features] = val_df.loc[:, normalize_features].mask(
+        val_df.loc[:, normalize_features].abs() > 3 * train_std
     )
-    test_df.loc[:, normalize_features] = test_df.loc[:, normalize_features].map(
-        filter_outlier
+    test_df.loc[:, normalize_features] = test_df.loc[:, normalize_features].mask(
+        test_df.loc[:, normalize_features].abs() > 3 * train_std
     )
 
     return train_df, val_df, test_df, default_fill, los_info, train_mean, train_std
@@ -199,11 +198,6 @@ for fold, (train_val_index, test_index) in enumerate(
     train_df, val_df, test_df, default_fill, los_info, train_mean, train_std = (
         normalize_dataframe(train_df, val_df, test_df, normalize_features)
     )
-
-    # Drop rows if all features are recorded NaN
-    train_df = train_df.dropna(axis=0, how="all", subset=normalize_features)
-    val_df = val_df.dropna(axis=0, how="all", subset=normalize_features)
-    test_df = test_df.dropna(axis=0, how="all", subset=normalize_features)
 
     # Forward Imputation after grouped by PatientID
     # Notice: if a patient has never done certain lab test, the imputed value will be the median value calculated from train set
