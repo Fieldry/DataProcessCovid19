@@ -5,8 +5,8 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, StratifiedKFold
 
-src_file = "data/formatted_data.csv"
-dst_dir = "processed"
+src_file = "datasets/tjh/raw/formatted_data.csv"
+dst_dir = "datasets/tjh/processed"
 
 
 def calculate_data_existing_length(data):
@@ -81,15 +81,6 @@ def forward_fill_pipeline(
     return all_x, all_y, all_pid
 
 
-def filter_outlier(element):
-    if pd.isna(element):
-        return 0
-    elif np.abs(float(element)) > 1e4:
-        return 0
-    else:
-        return element
-
-
 def normalize_dataframe(train_df, val_df, test_df, normalize_features):
     # Calculate the quantiles
     q_low = train_df[normalize_features].quantile(0.05)
@@ -97,14 +88,16 @@ def normalize_dataframe(train_df, val_df, test_df, normalize_features):
 
     # Filter the DataFrame based on the quantiles
     filtered_df = train_df[
-        (train_df[normalize_features] > q_low) & (train_df[normalize_features] < q_high)
+        (train_df[normalize_features] > q_low) & (
+            train_df[normalize_features] < q_high)
     ]
 
     # Calculate the mean and standard deviation and median of the filtered data, also the default fill value
     train_mean = filtered_df[normalize_features].mean()
     train_std = filtered_df[normalize_features].std()
     train_median = filtered_df[normalize_features].median()
-    default_fill: pd.DataFrame = (train_median - train_mean) / (train_std + 1e-12)
+    default_fill: pd.DataFrame = (
+        train_median - train_mean) / (train_std + 1e-12)
 
     # LOS info
     los_info = {
@@ -154,7 +147,8 @@ target_features = ["Outcome", "LOS"]
 demographic_features = ["Gender", "Age"]
 labtest_features = list(
     set(df.columns) - set(basic_records + target_features + demographic_features)
-).sort()
+)
+labtest_features.sort()
 seed = 42
 num_folds = 10
 

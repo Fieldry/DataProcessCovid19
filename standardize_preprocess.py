@@ -1,5 +1,6 @@
 import os
 
+from numpy import float32
 import pandas as pd
 
 src_file = "datasets/tjh/raw/time_series_375_prerpocess_en.xlsx"
@@ -27,11 +28,13 @@ df = df.rename(
 df["PatientID"] = df["PatientID"].ffill()
 
 # Change the order of columns
-basic_records = ["PatientID", "RecordTime", "AdmissionTime", "DischargeTime", "Outcome"]
+basic_records = ["PatientID", "RecordTime",
+                 "AdmissionTime", "DischargeTime", "Outcome"]
 demographic_features = ["Gender", "Age"]
 labtest_features = list(
     set(df.columns) - set(basic_records + demographic_features)
-).sort()
+)
+labtest_features.sort()
 df = df[basic_records + demographic_features + labtest_features]
 
 # Export standardized table
@@ -41,7 +44,7 @@ df.to_csv(os.path.join(dst_dir, standard_data), index=False)
 print("Finishing standardizing data!")
 
 # Gender transformation: 1--male, 0--female
-df["Sex"].replace(2, 0, inplace=True)
+df["Gender"] = df["Gender"].replace(2, 0)
 
 # Reserve Y/M/D format for `RecordTime`, `AdmissionTime` and `DischargeTime` columns
 df["RecordTime"] = df["RecordTime"].dt.strftime("%Y/%m/%d")
@@ -67,7 +70,8 @@ df = df.groupby(
 df.insert(
     5,
     "LOS",
-    (pd.to_datetime(df["DischargeTime"]) - pd.to_datetime(df["RecordTime"])).dt.days,
+    (pd.to_datetime(df["DischargeTime"]) -
+     pd.to_datetime(df["RecordTime"])).dt.days.astype(float32),
 )
 
 # Notice: Set negative LOS values to 0
