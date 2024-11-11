@@ -5,7 +5,7 @@ from lightning.pytorch.loggers import CSVLogger
 import numpy as np
 import pandas as pd
 
-from configs.config import ml_example_params as params
+from configs.config import ml_example_params, dl_example_params
 from datasets.loader import EhrDataModule, get_los_info
 from pipelines import DlPipeline, MlPipeline
 
@@ -65,7 +65,7 @@ def run_dl_experiment(config):
     L.seed_everything(config["seed"])  # seed for reproducibility
 
     # train/val/test
-    pipeline = DlPipeline(config, dm)
+    pipeline = DlPipeline(config)
     if config["accelerator"] == "cpu":
         devices = "auto"
     else:
@@ -85,7 +85,7 @@ def run_dl_experiment(config):
 if __name__ == "__main__":
     performance_table = {'dataset': [], 'task': [], 'model': [], 'fold': [], 'auprc': [], 'auroc': [
     ], 'es': [], 'accuracy': [], 'f1': [], 'mae': [], 'mse': [], 'osmae': [], 'rmse': [], 'r2': []}
-    for config in params:
+    for config in ml_example_params + dl_example_params:
         run_func = run_ml_experiment if config["model"] in [
             "RF", "DT", "GBDT", "CatBoost", "XGBoost"] else run_dl_experiment
         for fold in range(1, 10):
