@@ -28,7 +28,7 @@ DataProcessCOVID19/
 
 ## Usage
 
-The raw data in our research is already in the `datasets/raw/` folder.
+The raw data in our research is already in the `datasets/tjh/raw/` folder.
 
 To start with the data processing steps, use the following commands:
 
@@ -46,6 +46,8 @@ To start with the training and evaluating, use the following command:
 # Step 3: Train and evaluate the AI models
 python train_evaluate.py
 ```
+
+If you want to use datasets from other sources, please download the datasets and put them in the `datasets/` folder. Then, modify the file paths in the `standardize_preprocess.py` and `further_process.py`, and the `dataset` parameter in the `configs/config.py` file.
 
 
 For a deeper dive into our research, please refer to our associated published [paper](https://doi.org/10.48550/arxiv.2209.07805) and Github [repository](https://github.com/yhzhu99/pyehr/tree/main).
