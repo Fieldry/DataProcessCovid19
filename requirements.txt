@@ -1,4 +1,9 @@
-pandas
+catboost
+lightning
 numpy
-scikit-learn
 openpyxl
+pandas
+scikit-learn
+torch
+torchmetrics
+xgboost
