@@ -70,7 +70,7 @@ def forward_fill_pipeline(
             y = []
             for f in target_features:
                 y.append(v[f])
-            patient_y.append([v["Outcome"], v["LOS"]])
+            patient_y.append(y)
             x = []
             for f in demographic_features + labtest_features:
                 x.append(v[f])
@@ -134,13 +134,13 @@ def normalize_dataframe(train_df, val_df, test_df, normalize_features):
     ) / (train_std + 1e-12)
 
     train_df.loc[:, normalize_features] = train_df.loc[:, normalize_features].mask(
-        train_df.loc[:, normalize_features].abs() > 3 * train_std
+        train_df.loc[:, normalize_features].abs() > 3
     )
     val_df.loc[:, normalize_features] = val_df.loc[:, normalize_features].mask(
-        val_df.loc[:, normalize_features].abs() > 3 * train_std
+        val_df.loc[:, normalize_features].abs() > 3
     )
     test_df.loc[:, normalize_features] = test_df.loc[:, normalize_features].mask(
-        test_df.loc[:, normalize_features].abs() > 3 * train_std
+        test_df.loc[:, normalize_features].abs() > 3
     )
 
     return train_df, val_df, test_df, default_fill, los_info, train_mean, train_std
@@ -154,7 +154,7 @@ target_features = ["Outcome", "LOS"]
 demographic_features = ["Gender", "Age"]
 labtest_features = list(
     set(df.columns) - set(basic_records + target_features + demographic_features)
-)
+).sort()
 seed = 42
 num_folds = 10
 
