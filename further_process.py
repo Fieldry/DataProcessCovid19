@@ -216,3 +216,5 @@ for fold, (train_val_index, test_index) in enumerate(
     pd.to_pickle(test_y, os.path.join(fold_dir, "test_y.pkl"))
     pd.to_pickle(test_pid, os.path.join(fold_dir, "test_pid.pkl"))
     pd.to_pickle(los_info, os.path.join(fold_dir, "los_info.pkl"))
+
+print("Finishing processing data!")
