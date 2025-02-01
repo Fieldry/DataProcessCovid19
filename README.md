@@ -49,5 +49,6 @@ python train_evaluate.py
 
 If you want to use datasets from other sources, please download the datasets and put them in the `datasets/` folder. Then, modify the file paths in the `standardize_preprocess.py` and `further_process.py`, and the `dataset` parameter in the `configs/config.py` file.
 
+For more information about the TJH dataset we use in our research, please refer to the [paper](https://doi.org/10.1038/s42256-020-0180-7).
 
 For a deeper dive into our research, please refer to our associated published [paper](https://doi.org/10.48550/arxiv.2209.07805) and Github [repository](https://github.com/yhzhu99/pyehr/tree/main).
