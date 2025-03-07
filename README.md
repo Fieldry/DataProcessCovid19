@@ -4,7 +4,7 @@ The lack of standardized techniques for processing complex health data from COVI
 
 ## What's New
 
-🎉 [7 March 2025] Our [Paper](https://star-protocols.cell.com/protocols/4069) is accepted by Star Protocols!
+🎉 **[7 March 2025]** Our [Paper](https://star-protocols.cell.com/protocols/4069) is accepted by STAR Protocols!
 
 ## Highlights
 
