@@ -1,5 +1,17 @@
 # Protocol for Processing Multivariate Time-series Electronic Health Records of COVID-19 Patients
 
+The lack of standardized techniques for processing complex health data from COVID-19 patients hinders the development of accurate predictive models in healthcare. To address this, we present a protocol for utilizing real-world multivariate time-series electronic health records of COVID-19 patients. We describe steps for covering the necessary setup, data standardization, and formatting. We then provide detailed instructions for creating datasets and for training and evaluating AI models designed to predict two key outcomes: in-hospital mortality and length of stay.
+
+## What's New
+
+🎉 [7 March 2025] Our [Paper](https://star-protocols.cell.com/protocols/4069) is accepted by Star Protocols!
+
+## Highlights
+
+- Steps for standardizing multivariate time-series EHR data format of COVID-19 patients
+- Instructions for processing EHR data of COVID-19 patients for training AI models
+- Guidance on training and evaluating AI models through tailored pipelines
+
 ## Requirements
 
 To get started with the repository, ensure your environment meets the following requirements:
